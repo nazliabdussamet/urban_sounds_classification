@@ -9,8 +9,8 @@ zeros1 = np.zeros((1,500))
 zeros2 = np.zeros((384,1))
 y = []
 
-for i in range(10):
-    myString = "C:/python_projects/urban_sounds_classification/spectrograms/" + str(i) + "/*.png"
+for k in range(10):
+    myString = "C:/python_projects/urban_sounds_classification/spectrograms/" + str(k) + "/*.png"
     path = glob.glob(myString)
 
     for file in path:
@@ -36,7 +36,7 @@ for i in range(10):
             resizedData.append(myRow)
 
         myData.append(resizedData)
-        y.append(i)
+        y.append(k)
 
 x = np.array(myData)
 y = np.array(y)
