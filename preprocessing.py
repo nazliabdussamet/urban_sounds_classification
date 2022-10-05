@@ -41,6 +41,8 @@ for i in range(10):
 x = np.array(myData)
 y = np.array(y)
 
+x = x / 255
+
 x_train, x_test, y_train, y_test = train_test_split(x,y, test_size = 0.2)
 x_test, x_val, y_test, y_val = train_test_split(x_test, y_test, test_size = 0.5)
 
