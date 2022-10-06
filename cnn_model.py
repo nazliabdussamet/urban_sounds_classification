@@ -9,6 +9,7 @@ y_train = np.array(np.load("y_train.npy"))
 y_test = np.array(np.load("y_test.npy"))
 y_val = np.array(np.load("y_val.npy"))
 
+
 x_train = x_train.reshape(-1, 96, 128, 1)
 x_test = x_test.reshape(-1, 96, 128, 1)
 x_val = x_val.reshape(-1, 96, 128, 1)
@@ -16,7 +17,7 @@ x_val = x_val.reshape(-1, 96, 128, 1)
 
 model = tf.keras.Sequential()
 
-model.add(tf.keras.layers.Conv2D(32,
+model.add(tf.keras.layers.Conv2D(110,
                                  kernel_size = (3,3),
                                  strides = (1,1),
                                  padding = "same",
@@ -24,14 +25,29 @@ model.add(tf.keras.layers.Conv2D(32,
                                  input_shape = (96,128,1)))
 model.add(tf.keras.layers.MaxPooling2D((2,2)))
 
-model.add(tf.keras.layers.Conv2D(64,
+model.add(tf.keras.layers.Conv2D(110,
+                                 kernel_size = (3,3),
+                                 strides = (1,1),
+                                 padding = "same",
+                                 activation = "relu",
+                                 input_shape = (96,128,1)))
+model.add(tf.keras.layers.MaxPooling2D((2,2)))
+
+model.add(tf.keras.layers.Conv2D(220,
                                  kernel_size = (3,3),
                                  strides = (1,1),
                                  padding = "same",
                                  activation = "relu"))
 model.add(tf.keras.layers.MaxPooling2D((2,2)))
 
-model.add(tf.keras.layers.Conv2D(64,
+model.add(tf.keras.layers.Conv2D(220,
+                                 kernel_size = (3,3),
+                                 strides = (1,1),
+                                 padding = "same",
+                                 activation = "relu"))
+model.add(tf.keras.layers.MaxPooling2D((2,2)))
+
+model.add(tf.keras.layers.Conv2D(220,
                                  kernel_size = (3,3),
                                  strides = (1,1),
                                  padding = "same",
@@ -39,11 +55,15 @@ model.add(tf.keras.layers.Conv2D(64,
 
 model.add(tf.keras.layers.Flatten())
 
-model.add(tf.keras.layers.Dense(64,
+model.add(tf.keras.layers.Dense(110,
                                 activation="relu"))
 model.add(tf.keras.layers.Dropout(0.5))
 
-model.add(tf.keras.layers.Dense(64,
+model.add(tf.keras.layers.Dense(220,
+                                activation="relu"))
+model.add(tf.keras.layers.Dropout(0.5))
+
+model.add(tf.keras.layers.Dense(220,
                                 activation="relu"))
 model.add(tf.keras.layers.Dropout(0.5))
 
@@ -54,9 +74,11 @@ model.compile(optimizer="adam",
               loss="sparse_categorical_crossentropy",
               metrics=["accuracy"])
 
-callback = tf.keras.callbacks.EarlyStopping(monitor="loss", patiance=3)
+callback = tf.keras.callbacks.EarlyStopping(monitor="loss", patience = 3)
+
+
 results = model.fit(x_train, y_train,
-                    batch_size=128,
+                    batch_size=84,
                     epochs=50,
                     callbacks=[callback],
                     validation_data=(x_val,y_val))
